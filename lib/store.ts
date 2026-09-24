@@ -179,7 +179,7 @@ function supabaseStore(sb: SupabaseClient): Store {
       const stale = new Date(Date.now() - AI_LOCK_STALE_MS).toISOString();
       const rows = one(
         await sb.from("rooms").update({ ai_lock_at: now() }).eq("id", roomId)
-          .or(`ai_lock_at.is.null,ai_lock_at.lt.${stale}`).select("id"),
+          .or(`ai_lock_at.is.null,ai_lock_at.lt."${stale}"`).select("id"),
       );
       return Array.isArray(rows) && rows.length > 0;
     },

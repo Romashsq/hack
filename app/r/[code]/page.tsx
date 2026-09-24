@@ -2,7 +2,7 @@
 import { use, useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import QRCode from "qrcode";
-import { api, identityKey, useRoomEvents } from "@/lib/client";
+import { api, identityKey, useRoomEvents, type RealtimeMode } from "@/lib/client";
 import { normalizeCode } from "@/lib/codes";
 import { MODEL_LABEL, type Message, type ModelKind, type RoomEvent } from "@/lib/types";
 
@@ -13,6 +13,7 @@ type Snapshot = {
   messages: Message[];
   online: Online[];
   pending: number;
+  realtime: RealtimeMode;
 };
 type Live = { streamId: string; model: ModelKind; content: string };
 
@@ -129,7 +130,8 @@ function Room({ code, me, onKicked }: { code: string; me: Identity; onKicked: ()
     setSnap((s) => (!s || s.messages.some((x) => x.id === m.id) ? s : { ...s, messages: [...s.messages, m] }));
 
   useRoomEvents(
-    code,
+    snap ? code : null,
+    snap?.realtime ?? null,
     (e: RoomEvent) => {
       switch (e.type) {
         case "message":

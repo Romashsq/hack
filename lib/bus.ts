@@ -25,7 +25,12 @@ export async function publish(code: string, event: RoomEvent): Promise<void> {
   try {
     const res = await fetch(url, {
       method: "POST",
-      headers: { apikey: key, Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      headers: {
+        apikey: key,
+        "Content-Type": "application/json",
+        // Legacy JWT keys also go in Authorization; new sb_secret_ keys must not.
+        ...(key.startsWith("eyJ") ? { Authorization: `Bearer ${key}` } : {}),
+      },
       body: JSON.stringify({
         messages: [{ topic: channelName(code), event: "room", payload: event }],
       }),

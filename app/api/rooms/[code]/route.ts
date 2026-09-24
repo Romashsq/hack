@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { store } from "@/lib/store";
+import { store, usingSupabase } from "@/lib/store";
 import { bad, loadRoom } from "@/lib/http";
 
 export const dynamic = "force-dynamic";
@@ -17,5 +17,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ code: s
     messages,
     online: online.map((p) => ({ id: p.id, display_name: p.display_name })),
     pending,
+    // Tells the browser which realtime channel the server publishes on.
+    realtime: usingSupabase ? "supabase" : "sse",
   });
 }

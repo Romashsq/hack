@@ -4,8 +4,10 @@ import { publish } from "@/lib/bus";
 import { drainAiQueue } from "@/lib/runner";
 import { bad, body, loadRoom, member } from "@/lib/http";
 
-// The AI reply streams inside after(), so allow a long-running function.
-export const maxDuration = 300;
+// No per-route maxDuration here on purpose: every API route must share one
+// function config so Vercel bundles them into the same function (the
+// in-memory store only works when they share a process). The project default
+// timeout (300 s) covers the AI reply streaming inside after().
 
 const AI_PREFIX = /^\s*@ai\b[:,]?\s*/i;
 
