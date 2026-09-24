@@ -3,12 +3,11 @@
 Hackathon MVP: several people chat with **one AI (Claude or GPT) in one shared room** with one shared context, live.
 The host creates a room, others join by code, link or QR (no signup), and everyone sees the same history and the same AI reply streaming token by token.
 
-Standalone app. It has nothing to do with Folk AI and does not touch `apps/web`.
+Live: https://shared-ai-room.vercel.app
 
 ## Run locally (2 minutes, no database)
 
 ```bash
-cd hackathon/shared-ai-room
 npm install
 cp .env.example .env.local   # add ANTHROPIC_API_KEY / OPENAI_API_KEY (optional)
 npm run build && npm start   # http://localhost:3000
@@ -23,7 +22,7 @@ To use a phone on the same Wi-Fi, open `http://<laptop-LAN-IP>:3000`. The QR enc
 Serverless functions don't share memory, so production needs Supabase for storage and Realtime.
 
 1. Create a Supabase project and run `supabase/schema.sql` in the SQL Editor.
-2. Create a Vercel project with **Root Directory = `hackathon/shared-ai-room`** and set these env vars:
+2. In the Vercel project (repo root is the app root), set these env vars:
 
 | Var | Where it is used |
 |---|---|
